@@ -4,11 +4,28 @@ services:
   web:
     build:
       context: .
-    ports:
-      - 8000:8000
     restart: always
     links:
       - db
+
+    # The web service (your Django application) has labels to configure Traefik:
+    # 1. "traefik.enable=true">
+        # enables Traefik for this service.
+    # 2. "traefik.http.routers.django.rule=Host('your_domain.com')">
+        # This rule specifies that requests with the specified domain should be forwarded to this service. Replace your_domain.com with your actual domain name.
+    # 3. "traefik.http.routers.django.entrypoints=web">
+        # This specifies the entrypoint for the router. In this case, it uses the web entrypoint, which is defined in the Traefik service.
+    # 4. "traefik.http.services.django.loadbalancer.server.port=8000">
+        # This tells Traefik that your Django service listens on port 8000.
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.django.rule=Host(`dummy.localhost`)"
+      - "traefik.http.routers.django.entrypoints=web"
+      - "traefik.http.services.django.loadbalancer.server.port=8000"
+      - "traefik.http.routers.django.tls=true"  # Enable TLS for this route
+      - "traefik.http.routers.django.tls.certresolver=my-cluster-issuer"  # Use Cert-Manager resolver
+   
     networks:
       - pynetwork
 
@@ -23,6 +40,28 @@ services:
       - POSTGRES_DB=django_db
     ports:
       - 5432:5432
+    networks:
+      - pynetwork
+
+  traefik:
+    image: traefik:v2.2
+    ports:
+      - 80:80
+
+    #  The traefik service is responsible for routing and forwarding requests:
+    # 1. "--providers.docker=true">
+      # enables Traefik to listen to Docker events and automatically update its configuration based on running containers.
+    # 2. "--providers.docker.exposedbydefault=false">
+      # specifies that services should be explicitly marked for exposure to Traefik using labels (as done for the web service).
+    # 3. "--entrypoints.web.address=:80">
+      # defines the entrypoint for the web entrypoint, which listens on port 80.
+
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - pynetwork
 
