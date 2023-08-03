@@ -2,12 +2,12 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from .models import User
+from .models import People
 
 
 def get_users(request):
     # Get all users from the database
-    users = User.objects.all()
+    users = People.objects.all()
     data = [{'id': user.id, 'name': user.name, 'address': user.address} for user in users]
     return JsonResponse(data, safe=False)
 
@@ -27,7 +27,7 @@ def add_user(request):
             return JsonResponse({'error': 'Name and address are required.'}, status=400)
 
         # Create a new user in the database
-        user = User.objects.create(name=name, address=address)
+        user = People.objects.create(name=name, address=address)
 
         # Return the newly created user data
         return JsonResponse({'id': user.id, 'name': user.name, 'address': user.address}, status=201)

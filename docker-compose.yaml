@@ -12,7 +12,6 @@ services:
     networks:
       - pynetwork
 
-
   db:
     image: postgres
     # container_name: psqldb 
