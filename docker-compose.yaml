@@ -2,28 +2,31 @@ version: '3.8'
 
 services:
   web:
-    build: .
-    command: >
-      bash -c 'while !</dev/tcp/db/5432; do sleep 1; done;
-      python manage.py makemigrations &&
-      python manage.py migrate &&
-      echo "from django.contrib.auth.models import User; User.objects.create_superuser(username=\"admin\", password=\"secret\", email=\"admin@example.com\")" | python manage.py shell &&
-      python manage.py runserver'
+    build:
+      context: .
     ports:
       - 8000:8000
-    depends_on:
+    restart: always
+    links:
       - db
+    networks:
+      - pynetwork
+
 
   db:
-    image: postgres:15-alpine
+    image: postgres
+    # container_name: psqldb 
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - /home/mahin/dev/github.com/opsThing/database:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=django_db
     ports:
       - 5432:5432
+    networks:
+      - pynetwork
 
-volumes:
-  postgres_data:
+networks:
+  pynetwork:
+    driver: bridge
