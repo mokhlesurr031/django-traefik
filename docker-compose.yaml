@@ -23,8 +23,8 @@ services:
       - "traefik.http.routers.django.rule=Host(`dummy.localhost`)"
       - "traefik.http.routers.django.entrypoints=web"
       - "traefik.http.services.django.loadbalancer.server.port=8000"
-      - "traefik.http.routers.django.tls=true"  # Enable TLS for this route
-      - "traefik.http.routers.django.tls.certresolver=my-cluster-issuer"  # Use Cert-Manager resolver
+      # - "traefik.http.routers.django.tls=true"  # Enable TLS for this route
+      # - "traefik.http.routers.django.tls.certresolver=my-cluster-issuer"  # Use Cert-Manager resolver
    
     networks:
       - pynetwork
