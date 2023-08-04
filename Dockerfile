@@ -29,4 +29,4 @@ COPY . .
 # CMD ["runserver", "0.0.0.0:8000"]
 
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "django_traefik.wsgi:application"]
+# CMD ["gunicorn", "--bind", "0.0.0.0:8000", "django_traefik.wsgi:application"]

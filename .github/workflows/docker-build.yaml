@@ -1,0 +1,20 @@
+name: docker-build-push
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+    push-to-dockerhub:
+        name: Push Python Image to Docker Hub
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout to Code
+              uses: actions/checkout@v3
+
+            - name: Build and Push
+              run: |
+                docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_ACCESS_KEY }}
+                docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/django-traefik:$GITHUB_SHA .
+                docker push ${{ secrets.DOCKERHUB_USERNAME }}/django-traefik:$GITHUB_SHA
