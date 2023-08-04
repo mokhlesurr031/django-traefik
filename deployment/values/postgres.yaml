@@ -1,0 +1,15 @@
+# values/postgres.yaml
+
+# Set the PostgreSQL database name
+postgresqlDatabase: django_db
+
+# Set the PostgreSQL database user
+postgresqlUsername: admin
+
+# Set the PostgreSQL database password
+postgresqlPassword: secret
+
+# Set the PostgreSQL service port
+postgresqlPort: 5432
+
+

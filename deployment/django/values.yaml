@@ -1,0 +1,14 @@
+replicaCount: 1
+image:
+  repository: mahin96/django-traefik
+  pullPolicy: Always
+  tag: latest
+containerPort: 8000
+restartPolicy: Always
+
+service:
+  web:
+    type: NodePort 
+    port: 8000
+    protocol: TCP 
+
