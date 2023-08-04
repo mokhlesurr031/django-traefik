@@ -1,15 +1,13 @@
-# values/postgres.yaml
+# userPasswordKey for custom user password which is "secret" here
+# adminPasswordKey for default user which is "postgres" and its password is "secret1"
 
-# Set the PostgreSQL database name
-postgresqlDatabase: django_db
-
-# Set the PostgreSQL database user
-postgresqlUsername: admin
-
-# Set the PostgreSQL database password
-postgresqlPassword: secret
-
-# Set the PostgreSQL service port
-postgresqlPort: 5432
-
+auth:
+  enablePostgresUser: true
+  postgresPassword: "secret1"
+  username: "admin"
+  password: "secret"
+  database: "django_db"
+  secretKeys:
+    adminPasswordKey: postgres-password
+    userPasswordKey: password
 
