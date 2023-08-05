@@ -10,7 +10,7 @@ spec:
   ports:
     - name: web-port
       port: {{ .Values.service.web.port }}
-      targetPort: {{ .Values.service.web.port }}
+      targetPort: {{ .Values.service.web.targetPort }}
       protocol: {{ .Values.service.web.protocol }}
 
   type: {{ .Values.service.web.type }}

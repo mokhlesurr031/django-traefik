@@ -1,0 +1,49 @@
+## values/traefik.yaml
+## Customize values for Traefik Helm chart
+
+# Enable IngressRoute CRD support
+traefik:
+  ingressRoute:
+    enabled: true
+
+# Set the deployment replicas
+replicaCount: 2
+
+# Configure the default http and https routers
+additionalArguments:
+- --entrypoints.web.address=:80
+- --entrypoints.websecure.address=:443
+- --providers.kubernetescrd
+- --providers.kubernetesingress
+- --providers.kubernetesingress.ingressclass=traefik
+- --providers.kubernetesingress.certresolver=default
+- --log.level=INFO
+
+# Configure access to the Traefik dashboard (optional)
+dashboard:
+  enabled: true
+  domain: dummy.localhost # Replace this with your desired domain or IP
+
+# Use Let's Encrypt certificate for HTTPS (optional)
+# certificatesResolvers:
+#   default:
+#     acme:
+#       email: mokhlesurr031@gmail.com # Replace this with your email address
+#       storage: acme.json
+#       httpChallenge:
+#         entryPoint: web
+
+# Additional customizations and configurations can be added as needed
+
+# Configure IngressRoute to route traffic to your Django service
+ingressRoute:
+  enabled: true
+  # Replace "your.domain.com" with the domain or IP where you want to access your Django app
+  # If you want to use a path-based routing, you can change the "path" value accordingly
+  # For example, if your Django app is at "/my-django-app", you can set path: /my-django-app
+  route:
+    kind: Rule
+    match: Host(`your.domain.com`) && PathPrefix(`/`)
+    services:
+    - name: django-app-web-svc # Replace this with the service name defined in service.yaml
+      port: 8000 # Replace this with the port name defined in service.yaml

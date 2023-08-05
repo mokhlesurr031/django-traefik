@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "chart.fullname" . }}-web-ing
+
+spec:
+  rules:
+    - host: dummy.localhost
+      http:
+        paths:
+          - path: /  # Replace this with the path you want to use for your Django app
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "chart.fullname" . }}-web-svc
+                port:
+                  number: {{ .Values.service.web.port }}

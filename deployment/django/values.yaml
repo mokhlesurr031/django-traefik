@@ -2,7 +2,7 @@ replicaCount: 1
 image:
   repository: mahin96/django-traefik
   pullPolicy: Always
-  tag: bed60e75f4d0d568e4fd4fd344021271ea8b0eff
+  tag: c2f4d3387d02c8506c176093b20a973b62d413ff
 containerPort: 8000
 restartPolicy: Always
 
@@ -11,4 +11,6 @@ service:
     type: NodePort
     port: 8000
     protocol: TCP
+    targetPort: 8000
+
 
