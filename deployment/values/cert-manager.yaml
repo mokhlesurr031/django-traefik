@@ -1,27 +1,22 @@
-# values/cert-manager.yaml
-# Customize values for Cert-Manager Helm chart
+# cert-manager.yaml
 
-# Install the CRDs for Cert-Manager
-installCRDs: true
+# cert-manager settings
+certManager:
+  installCRDs: true # Set to true if you haven't installed cert-manager CRDs separately
 
-# Set the namespace where Cert-Manager will be installed
-namespace: default
-
-# Change this to the email address you want to use for certificate registration
-acme:
-  email: mokhlesurr031@gmail.com
-
-# Use the HTTP01 ACME challenge type for Let's Encrypt certificate
-# Note: If you want to use DNS01 challenge, you'll need to set up additional configurations
-# and specify the acmeDNSChallenge section accordingly.
-acme:
-  solvers:
-  - http01:
-      ingress:
-        class: traefik
-
-# Uncomment the following section if you want to use Let's Encrypt staging endpoint for testing purposes
-# acme:
-#   server: https://acme-staging-v02.api.letsencrypt.org/directory
-
-# Additional customizations and configurations can be added as needed
+# Define your ClusterIssuer
+additionalResources:
+- apiVersion: cert-manager.io/v1
+  kind: ClusterIssuer
+  metadata:
+    name: letsencrypt-staging
+  spec:
+    acme:
+      server: https://acme-staging-v02.api.letsencrypt.org/directory
+      email: mokhlesurr031@gmail.com
+      privateKeySecretRef:
+        name: letsencrypt-staging
+      solvers:
+      - http01:
+          ingress:
+            class: traefik
